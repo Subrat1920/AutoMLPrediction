@@ -156,19 +156,22 @@
     
     <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
         <main class="px-3 text-center">
-          <h1 class="display-4">Inspecting the Data</h1>
-          <p class="lead">
-            GET START with uploading a CSV/Excel File
-          </p> <br>
           
-            <form action="/data-inspection" method="POST" enctype="multipart/form-data">
-                <div class="input-group mb-3">
-                    <input type="file" class="form-control" id="inputGroupFile02" name="files" required>
-                    <button type = "submit" class="input-group-text" for="inputGroupFile02">Upload</button>
-                </div>
-            </form>
-
-            <div class="container text-center">
+              
+            <div class="container my-5">
+              <div class="text-center mb-4">
+                  <h1 class="display-4">Inspecting the Data</h1>
+                  <p class="lead">Upload a CSV or Excel file to get started</p>
+              </div>
+          
+              <form action="/data-inspection" method="POST" enctype="multipart/form-data" class="mb-5">
+                  <div class="input-group">
+                      <input type="file" class="form-control" id="inputGroupFile" name="files" required>
+                      <button type="submit" class="btn btn-primary">Upload</button>
+                  </div>
+              </form>
+          
+              <div class="container text-center">
                 <div class="row row-cols-2">
                     <div class="col">
                         {% if rows is not none and columns is not none %}
@@ -195,11 +198,41 @@
                             <p>No file uploaded yet.</p>
                         {% endif %}
                     </div>
+                    <!-- right colum  -->
                     <div class="col">
-                        
-                    </div>
+                      <!-- for categorical columns -->
+                      {% if rows is not none and categorical_column_names is defined %}
+                        <h3><strong>Categorical Columns</strong></h3>
+                        <p>Number of Categorical Columns {{categorical_column_names|length}}</p><br>
+                        {% for i in range(0, categorical_column_names|length, 3) %}
+                          <ul class="list-group list-group-horizontal">
+                            {% for col in categorical_column_names[i:i+3] %}
+                              <li class="list-group-item">{{ col }}</li>
+                            {% endfor %}
+                          </ul>
+                            {% endfor %}
+                      {% else %}
+                        <p>No categorical columns found.</p>
+                      {% endif %}
+                      <!-- for numerical columns -->
+                      {% if rows is not none and numerical_column_names is defined %}
+                        <h3><strong>Numerical Columns</strong></h3>
+                        <p>Number of Numerical Columns {{numerical_column_names|length}}</p><br>
+                        {% for i in range(0, numerical_column_names|length, 3) %}
+                        <ul class="list-group list-group-horizontal">
+                            {% for col in numerical_column_names[i:i+3] %}
+                            <li class="list-group-item">{{ col }}</li>
+                            {% endfor %}
+                      </ul>
+                      {% endfor %}
+                      {% else %}
+                      <p>No categorical columns found.</p>
+                      {% endif %} 
+
+                  </div>
                 </div>
             </div>
+          
 
         </main>
       

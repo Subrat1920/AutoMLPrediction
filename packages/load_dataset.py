@@ -29,7 +29,7 @@ def categorical_columns(data_frame):
     return result
 
 def boolean_colums(data_frame):
-    result = [x for x in data_frame.columns if data_frame[x].columns in ['bool']]
+    result = [x for x in data_frame.columns if not data_frame[x].dtypes in ['object','int64', 'float64', 'int32', 'float32', 'int', 'float']]
     return result
 
 

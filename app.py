@@ -46,17 +46,30 @@ def data_inspection():
             ## Calculate rows and columns
             rows, cols = df.shape
 
-            return render_template('data_inspection.html', columns=cols, rows=rows, column_names = df.columns)
+            ## for categorical values retraction
+            cat_cols = categorical_columns(df)
+
+            ## for numerical colums retraction
+            num_cols = numerical_columns(df)
+
+            ## for boolean columns retraciton
+            bool_cols = boolean_colums(df)
+
+            return render_template('data_inspection.html', columns=cols, rows=rows, column_names = df.columns, categorical_column_names = cat_cols, numerical_column_names = num_cols, boolean_column_names = bool_cols)
 
     ## retrieving Dataframe from cache
     df = cache.get('dataframe') 
     if df is not None:
         ## Calculate rows and columns
         rows, cols = df.shape
-        return render_template('data_inspection.html', columns=cols, rows=rows, column_names = df.columns)
+        ## retracting again all the categorical, numerical and boolean columns
+        cat_cols = categorical_columns(df)
+        num_cols = numerical_columns(df)
+        bool_cols = boolean_colums(df)
+        return render_template('data_inspection.html', columns=cols, rows=rows, column_names = df.columns, categorical_column_names = cat_cols, numerical_column_names = num_cols, boolean_column_names = bool_cols)
 
     ## Render the form for GET requests or if no file is uploaded
-    return render_template('data_inspection.html', columns=None, rows=None)
+    return render_template('data_inspection.html', columns=None, rows=None, categorical_column_names = None, numerical_column_names = None, boolean_column_names = None)
     
 
 
