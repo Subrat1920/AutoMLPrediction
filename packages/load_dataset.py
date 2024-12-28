@@ -9,11 +9,11 @@ def read_excel_file(file_name):
     return pd.read_excel(file_name)
 
 ## checking the shape, rows and columns of the dataset
-def shape(data_frame):
+def file_shape(data_frame):
     shape = data_frame.shape
     rows = shape[0]
     columns = shape[1]
-    return shape, rows, columns
+    return  rows, columns
 
 ## head of the df
 def head(data_frame, num_of_samples):
