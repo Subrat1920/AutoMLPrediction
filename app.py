@@ -8,6 +8,7 @@ import os
 import io
 import base64
 from werkzeug.utils import secure_filename
+from flask_caching import Cache
 
 ## loading data
 from packages.load_dataset import read_csv_file, read_excel_file, file_shape, categorical_columns, numerical_columns, boolean_colums, head
@@ -18,6 +19,8 @@ from packages.evaluate_models import evaluate_classification_model, evaluate_reg
 
 
 app = Flask(__name__)
+## caching the configuration
+cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
 
 ## routing the home page
 @app.route('/')
@@ -37,10 +40,20 @@ def data_inspection():
             else:
                 return 'Invalid file type. Please upload a CSV or XLSX file.'
 
-            # Calculate rows and columns
+        
+            ## cache dataframe
+            cache.set('dataframe', df)
+            ## Calculate rows and columns
             rows, cols = df.shape
 
             return render_template('data_inspection.html', columns=cols, rows=rows, column_names = df.columns)
+
+    ## retrieving Dataframe from cache
+    df = cache.get('dataframe') 
+    if df is not None:
+        ## Calculate rows and columns
+        rows, cols = df.shape
+        return render_template('data_inspection.html', columns=cols, rows=rows, column_names = df.columns)
 
     ## Render the form for GET requests or if no file is uploaded
     return render_template('data_inspection.html', columns=None, rows=None)

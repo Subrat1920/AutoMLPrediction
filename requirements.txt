@@ -1,0 +1,10 @@
+flask
+flask-caching
+pandas
+numpy
+os
+io
+sklearn
+matplotlib
+seaborn
+
